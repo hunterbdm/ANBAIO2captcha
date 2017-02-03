@@ -9,9 +9,10 @@
 # Run
 
 0. Put your 2captcha apikey into apikey.txt
-1. Open cmd as Administrator
-2. Change directory to ANBAIO2captcha folder
-3. 'python ANBAIO2captcha.py'
+1  In AIOBOT, open captcha solver for whichever site you want to use. You can just minimize it after you open it.
+2. Open cmd as Administrator
+3. Change directory to ANBAIO2captcha folder
+4. 'python ANBAIO2captcha.py'
 
 DM me on twitter @hunter_bdm with any questions.
 
