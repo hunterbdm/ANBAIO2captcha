@@ -72,7 +72,7 @@ def get_balance():
             'json': 1,
         }
         response = session.get(url='http://2captcha.com/res.php', params=data)
-        if "ERROR_WRONG_USER_KEY" in response.text:
+        if "ERROR_WRONG_USER_KEY" in response.text or "ERROR_KEY_DOES_NOT_EXIST" in response.text:
             print('Incorrect APIKEY, exiting.')
             exit()
 
@@ -107,7 +107,7 @@ def get_token_from_2captcha(sitekey):
             'json': 1,
         }
         response = session.get(url='http://2captcha.com/res.php', params=data)
-        if "ERROR_WRONG_USER_KEY" in response.text:
+        if "ERROR_WRONG_USER_KEY" in response.text or "ERROR_KEY_DOES_NOT_EXIST" in response.text:
             print('Incorrect APIKEY, exiting.')
             exit()
 
