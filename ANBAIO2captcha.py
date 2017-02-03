@@ -4,7 +4,7 @@ import threading
 import webbrowser
 from bs4 import BeautifulSoup as bs
 
-current_verson = '1.1.0.0'
+current_verson = '1.1.0.1'
 
 apikey = None
 site = None
@@ -128,6 +128,7 @@ def check_updates():
     try:
         response = requests.get('https://raw.githubusercontent.com/hunterbdm/ANBAIO2captcha/master/README.md')
     except:
+        print('here')
         print('Unable to check for updates.')
         return
 
@@ -150,6 +151,8 @@ def check_updates():
             print('You can find the latest version here https://github.com/hunterbdm/ANBAIO2captcha')
             webbrowser.open('https://github.com/hunterbdm/ANBAIO2captcha')
             exit()
+        print('No updates currently available. Version:', current_verson)
+        return
     print('Unable to check for updates.')
     return
 
