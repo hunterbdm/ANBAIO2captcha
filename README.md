@@ -5,6 +5,7 @@
 0. Download & Install python 3.x from https://www.python.org/downloads/. Be sure to check "Add to PATH" when installing.
 1. Open cmd as Administrator
 2. 'pip3 install bs4'
+3. 'pip3 install requests'
 
 # Run
 
