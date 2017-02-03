@@ -8,6 +8,7 @@
 
 # Run
 
+0. Put your 2captcha apikey into apikey.txt
 1. Open cmd as Administrator
 2. Change directory to ANBAIO2captcha folder
 3. 'python ANBAIO2captcha.py'
