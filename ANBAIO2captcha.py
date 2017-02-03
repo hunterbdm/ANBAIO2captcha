@@ -1,7 +1,10 @@
 import requests
 import time
 import threading
+import webbrowser
 from bs4 import BeautifulSoup as bs
+
+current_verson = '1.1.0.0'
 
 apikey = None
 site = None
@@ -59,6 +62,96 @@ post_urls = [
         'http://anb.consortium.co.uk:54785/resConsortium'
     ]
 
+def main():
+    global apikey
+    global site
+
+
+    print(
+        """
+  ___                 _       _                      _____ ____
+ |__ \               | |     | |               /\   |_   _/ __ \\
+    ) |___ __ _ _ __ | |_ ___| |__   __ _     /  \    | || |  | |
+   / // __/ _` | '_ \| __/ __| '_ \ / _` |   / /\ \   | || |  | |
+  / /| (_| (_| | |_) | || (__| | | | (_| |  / ____ \ _| || |__| |
+ |____\___\__,_| .__/ \__\___|_| |_|\__,_| /_/    \_\_____\____/
+               | |   Twitter - https://twitter.com/hunter_bdm
+               |_|   Github - https://github.com/hunterbdm
+        """
+    )
+
+    check_updates()
+
+    apikey_file = open('apikey.txt')
+    apikey = apikey_file.read()
+    apikey_file.close()
+
+    print('Got APIKEY:', apikey)
+    print('Balance:', get_balance(), '\n')
+
+    for i in range(0, len(site_names)):
+        print(i, '-', site_names[i])
+    x = int(input('Pick a site: '))
+    site = x
+
+    print('Captcha Solver URL:', solver_urls[x])
+
+    x = int(input('How many captchas?: '))
+
+    sitekey = get_sitekey()
+
+    if sitekey is None:
+        return
+
+    print('Got sitekey', sitekey)
+
+    for i in range(0, int(x)):
+        t = threading.Thread(target=get_token_from_2captcha, args=(sitekey, ))
+        t.daemon = True
+        t.start()
+        time.sleep(0.1)
+    print('Requested ' + str(x) + ' captcha(s).')
+    print('Will exit when all captcha solutions arrived.')
+    while not active_threads == 0:
+        print('-------------------------')
+        print('Active Threads          -', active_threads)
+        print('Captchas Sent to ANBAIO -', captchas_sent)
+        time.sleep(5)
+
+    print('-------------------------')
+    print('Active Threads          -', active_threads)
+    print('Captchas Sent to ANB AIO -', captchas_sent)
+
+
+def check_updates():
+    # Check if the current version is outdated
+    try:
+        response = requests.get('https://raw.githubusercontent.com/hunterbdm/ANBAIO2captcha/master/README.md')
+    except:
+        print('Unable to check for updates.')
+        return
+
+    # If for some reason I forget to add the version to readme I dont want it to fuck up
+    if 'Latest Version' in response.text:
+        # Grab first line in readme. Will look like this 'Latest Version: 1.0.0.0'
+        latest = (response.text.split('\n')[0])
+        # Will remove 'Latest Version: ' from string so we just have the version number
+        latest = latest[(latest.index(':') + 2):]
+        if not latest == current_verson:
+            print('You are not on the latest version.')
+            print('Your version:', current_verson)
+            print('Latest version:', latest)
+            x = input('Would you like to download the latest version? (Y/N) ').upper()
+            while not x == 'Y' and not x == 'N':
+                print('Invalid input.')
+                x = input('Would you like to download the latest version? (Y/N) ').upper()
+            if x == 'N':
+                return
+            print('You can find the latest version here https://github.com/hunterbdm/ANBAIO2captcha')
+            webbrowser.open('https://github.com/hunterbdm/ANBAIO2captcha')
+            exit()
+    print('Unable to check for updates.')
+    return
 
 def get_balance():
     session = requests.Session()
@@ -201,65 +294,6 @@ def send_captcha(captcha_response):
         active_threads -= 1
         return None
 
-
-def main():
-    global apikey
-    global site
-
-
-    print(
-        """
-  ___                 _       _                      _____ ____
- |__ \               | |     | |               /\   |_   _/ __ \\
-    ) |___ __ _ _ __ | |_ ___| |__   __ _     /  \    | || |  | |
-   / // __/ _` | '_ \| __/ __| '_ \ / _` |   / /\ \   | || |  | |
-  / /| (_| (_| | |_) | || (__| | | | (_| |  / ____ \ _| || |__| |
- |____\___\__,_| .__/ \__\___|_| |_|\__,_| /_/    \_\_____\____/
-               | |   Twitter - https://twitter.com/hunter_bdm
-               |_|   Github - https://github.com/hunterbdm
-        """
-    )
-
-
-    apikey_file = open('apikey.txt')
-    apikey = apikey_file.read()
-    apikey_file.close()
-
-    print('Got APIKEY:', apikey)
-    print('Balance:', get_balance(), '\n')
-
-    for i in range(0, len(site_names)):
-        print(i, '-', site_names[i])
-    x = int(input('Pick a site: '))
-    site = x
-
-    print('Captcha Solver URL:', solver_urls[x])
-
-    x = int(input('How many captchas?: '))
-
-    sitekey = get_sitekey()
-
-    if sitekey is None:
-        return
-
-    print('Got sitekey', sitekey)
-
-    for i in range(0, int(x)):
-        t = threading.Thread(target=get_token_from_2captcha, args=(sitekey, ))
-        t.daemon = True
-        t.start()
-        time.sleep(0.1)
-    print('Requested ' + str(x) + ' captcha(s).')
-    print('Will exit when all captcha solutions arrived.')
-    while not active_threads == 0:
-        print('-------------------------')
-        print('Active Threads          -', active_threads)
-        print('Captchas Sent to ANBAIO -', captchas_sent)
-        time.sleep(5)
-
-    print('-------------------------')
-    print('Active Threads          -', active_threads)
-    print('Captchas Sent to ANB AIO -', captchas_sent)
 
 if __name__ == "__main__":
     main()

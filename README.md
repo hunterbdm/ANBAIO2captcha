@@ -1,3 +1,5 @@
+Latest Version: 1.1.0.0
+
 # ANBAIO2captcha
 
 # Setup
