@@ -120,7 +120,7 @@ def main():
 
     print('-------------------------')
     print('Active Threads          -', active_threads)
-    print('Captchas Sent to ANB AIO -', captchas_sent)
+    print('Captchas Sent to ANBAIO -', captchas_sent)
 
 
 def check_updates():
