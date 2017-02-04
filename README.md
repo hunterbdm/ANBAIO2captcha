@@ -15,7 +15,7 @@ Latest Version: 1.2.0
 1. Put your proxies(if any) into proxies.txt (Proxies are NOT required)
 2. In AIOBOT, open the captcha solver for whichever site you want to use. You can minimize it after you open it.
 3. Open cmd as Administrator.
-4. Change directory to ANBAIO2captcha folder. Example: 'cd C:\Users\Hunter\Desktop\AdidasQueuer-master'
+4. Change directory to ANBAIO2captcha folder. Example: 'cd C:\Users\Hunter\Desktop\ANBAIO2captcha'
 5. 'python ANBAIO2captcha.py'
 
 DM me on twitter @hunter_bdm with any questions.
