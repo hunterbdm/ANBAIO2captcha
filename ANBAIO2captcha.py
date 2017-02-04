@@ -2,10 +2,12 @@ import requests
 import time
 import threading
 import webbrowser
+import random
 from bs4 import BeautifulSoup as bs
 
-current_verson = '1.1.0.1'
+current_version = '1.2.0'
 
+proxies = []
 apikey = None
 site = None
 
@@ -23,49 +25,49 @@ captchas_sent = 0
 """
 
 site_names = [
-        'Adidas',
-        'SNS',
-        'RuVilla',
-        'Bodega',
-        'YeezySupply',
-        'PalaceSB',
-        'Consortium'
-    ]
+    'Adidas',
+    'SNS',
+    'RuVilla',
+    'Bodega',
+    'YeezySupply',
+    'PalaceSB',
+    'Consortium'
+]
 
 site_urls = [
-        'http://www.adidas.com',
-        'http://www.sneakersnstuff.com',
-        'http://www.ruvilla.com',
-        'http://www.bodega.com',
-        'http://www.yeezysupply.com',
-        'http://www.palaceskateboards.com',
-        'http://www.consortium.co.uk'
-    ]
+    'http://www.adidas.com',
+    'http://www.sneakersnstuff.com',
+    'http://www.ruvilla.com',
+    'http://www.bodega.com',
+    'http://www.yeezysupply.com',
+    'http://www.palaceskateboards.com',
+    'http://www.consortium.co.uk'
+]
 
 solver_urls = [
-        'http://anb.adidas.com:54785/AdidasCaptcha.html',
-        'http://anb.sneakersnstuff.com:54785/SNSCaptcha.html',
-        'http://anb.ruvilla.com:54785/RuVillaCaptcha.html',
-        'bodega Unknown',            # Unconfirmed
-        'yeezysupply Unknown',  # Unconfirmed
-        'palaceskateboards Unknown',     # Unconfirmed
-        'http://anb.consortium.co.uk:54785/ConsortiumCaptcha.html'
-    ]
+    'http://anb.adidas.com:54785/AdidasCaptcha.html',
+    'http://anb.sneakersnstuff.com:54785/SNSCaptcha.html',
+    'http://anb.ruvilla.com:54785/RuVillaCaptcha.html',
+    'http://anb.bdgastore.com:54785/bdgastoreCaptcha.html',  # Unconfirmed
+    'http://anb.yeezysupply.com:54785/YeezySupplyCaptcha.html',  # Unconfirmed
+    'http://anb.palaceskateboards.com:54785/PalaceSBCaptcha.html',  # Unconfirmed
+    'http://anb.consortium.co.uk:54785/ConsortiumCaptcha.html'
+]
 
 post_urls = [
-        'http://anb.adidas.com:54785/resadidas',
-        'http://anb.sneakersnstuff.com:54785/ressns',
-        'http://anb.ruvilla.com:54785/resruvilla',
-        'bodega Unknown',            # Unconfirmed
-        'yeezysupply Unknown',  # Unconfirmed
-        'palaceskateboards Unknown',       # Unconfirmed
-        'http://anb.consortium.co.uk:54785/resConsortium'
-    ]
+    'http://anb.adidas.com:54785/resadidas',
+    'http://anb.sneakersnstuff.com:54785/ressns',
+    'http://anb.ruvilla.com:54785/resruvilla',
+    'http://anb.bdgastore.com:54785/resbodega',  # Unconfirmed
+    'http://anb.yeezysupply.com:54785/resyeezysupply',  # Unconfirmed
+    'http://anb.palaceskateboards.com:54785/respalacesb',  # Unconfirmed
+    'http://anb.consortium.co.uk:54785/resConsortium'
+]
+
 
 def main():
     global apikey
     global site
-
 
     print(
         """
@@ -82,12 +84,32 @@ def main():
 
     check_updates()
 
-    apikey_file = open('apikey.txt')
-    apikey = apikey_file.read()
-    apikey_file.close()
+    # Get 2captcha APIKEY
+    try:
+        apikey_file = open('apikey.txt')
+        apikey = apikey_file.read()
+        apikey_file.close()
+    except:
+        print('Unable to read apikey.txt')
+        exit()
 
     print('Got APIKEY:', apikey)
     print('Balance:', get_balance(), '\n')
+
+    # Get proxies
+    try:
+        proxy_file = open('proxies.txt')
+        for proxy in proxy_file.read().splitlines():
+            # No lines should have spaces, so remove all of them
+            proxy = proxy.replace(' ', '')
+            # Now that we removed extra spaces, if there is nothing remaining on that line, we wont add it to the list.
+            if not proxy == '':
+                proxies.append(proxy)
+        proxy_file.close()
+        print(len(proxies), 'proxies found.')
+        print(proxies)
+    except:
+        print('Unable to read proxies.txt, continuing without proxies.')
 
     for i in range(0, len(site_names)):
         print(i, '-', site_names[i])
@@ -106,7 +128,7 @@ def main():
     print('Got sitekey', sitekey)
 
     for i in range(0, int(x)):
-        t = threading.Thread(target=get_token_from_2captcha, args=(sitekey, ))
+        t = threading.Thread(target=get_token_from_2captcha, args=(sitekey,))
         t.daemon = True
         t.start()
         time.sleep(0.1)
@@ -138,9 +160,9 @@ def check_updates():
         latest = (response.text.split('\n')[0])
         # Will remove 'Latest Version: ' from string so we just have the version number
         latest = latest[(latest.index(':') + 2):]
-        if not latest == current_verson:
+        if not latest == current_version:
             print('You are not on the latest version.')
-            print('Your version:', current_verson)
+            print('Your version:', current_version)
             print('Latest version:', latest)
             x = input('Would you like to download the latest version? (Y/N) ').upper()
             while not x == 'Y' and not x == 'N':
@@ -151,10 +173,11 @@ def check_updates():
             print('You can find the latest version here https://github.com/hunterbdm/ANBAIO2captcha')
             webbrowser.open('https://github.com/hunterbdm/ANBAIO2captcha')
             exit()
-        print('No updates currently available. Version:', current_verson)
+        print('No updates currently available. Version:', current_version)
         return
     print('Unable to check for updates.')
     return
+
 
 def get_balance():
     session = requests.Session()
@@ -219,6 +242,11 @@ def get_token_from_2captcha(sitekey):
                 'pageurl': pageurl,
                 'json': 1
             }
+
+            if not len(proxies) == 0:
+                # We will just pick randomly from the list because it doesn't matter if we use one more than others.
+                data['proxy'] = random.choice(proxies)
+
             response = session.post(url='http://2captcha.com/in.php', data=data)
             try:
                 json = response.json()
@@ -285,8 +313,8 @@ def send_captcha(captcha_response):
         data_name = post_url[(post_url.index('54785/') + 6):]
 
         data = {
-                data_name: captcha_response
-            }
+            data_name: captcha_response
+        }
         resp = session.post(post_url, data=data)
         if resp.status_code is 200:
             active_threads -= 1

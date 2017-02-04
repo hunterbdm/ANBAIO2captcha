@@ -1,4 +1,4 @@
-Latest Version: 1.1.0.1
+Latest Version: 1.2.0
 
 # ANBAIO2captcha
 
@@ -12,10 +12,11 @@ Latest Version: 1.1.0.1
 # Run
 
 0. Put your 2captcha apikey into apikey.txt
-1. In AIOBOT, open the captcha solver for whichever site you want to use. You can minimize it after you open it.
-2. Open cmd as Administrator
-3. Change directory to ANBAIO2captcha folder
-4. 'python ANBAIO2captcha.py'
+1. Put your proxies(if any) into proxies.txt (Proxies are NOT required)
+2. In AIOBOT, open the captcha solver for whichever site you want to use. You can minimize it after you open it.
+3. Open cmd as Administrator.
+4. Change directory to ANBAIO2captcha folder. Example: 'cd C:\Users\Hunter\Desktop\AdidasQueuer-master'
+5. 'python ANBAIO2captcha.py'
 
 DM me on twitter @hunter_bdm with any questions.
 
