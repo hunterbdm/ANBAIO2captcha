@@ -2,6 +2,9 @@ Latest Version: 1.2.0
 
 # ANBAIO2captcha
 
+# Video
+http://streamable.com/h20nf
+
 # Setup
 
 0. Download & Install python 3.x from https://www.python.org/downloads/. Be sure to check "Add to PATH" when installing.
