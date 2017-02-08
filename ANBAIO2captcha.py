@@ -3,9 +3,10 @@ import time
 import threading
 import webbrowser
 import random
+import datetime
 from bs4 import BeautifulSoup as bs
 
-current_version = '1.2.0'
+current_version = '1.3.0'
 
 proxies = []
 apikey = None
@@ -118,31 +119,62 @@ def main():
 
     print('Captcha Solver URL:', solver_urls[x])
 
-    x = int(input('How many captchas?: '))
-
     sitekey = get_sitekey()
-
-    if sitekey is None:
-        return
-
     print('Got sitekey', sitekey)
 
-    for i in range(0, int(x)):
-        t = threading.Thread(target=get_token_from_2captcha, args=(sitekey,))
-        t.daemon = True
-        t.start()
-        time.sleep(0.1)
-    print('Requested ' + str(x) + ' captcha(s).')
-    print('Will exit when all captcha solutions arrived.')
-    while not active_threads == 0:
-        print('-------------------------')
-        print('Active Threads          -', active_threads)
-        print('Captchas Sent to ANBAIO -', captchas_sent)
-        time.sleep(5)
+    print(
+"""
+--  Modes  --
+1. Normal        (Request X amount of captchas now, and stop after.)
+2. Never Ending. (Request X amount of captchas every Y minutes.)
+"""
+    )
+    mode = get_integer('Select a mode: ')
 
-    print('-------------------------')
-    print('Active Threads          -', active_threads)
-    print('Captchas Sent to ANBAIO -', captchas_sent)
+    if mode == 2:
+        print('Using Never Ending mode.')
+        # Get how often we should request captchas.
+        minutes = get_float('How often to request new captchas(in minutes): ')
+        sleep_time = minutes * 60
+        request_amount = get_integer('How many captchas to request every ' + str(minutes) + ' minutes: ')
+
+        print('Requesting', str(request_amount), 'captchas every', str(minutes), 'minutes.')
+
+        while True:
+            # Since we are not requesting all at once, we will check if AIO bot changed the sitekey on the solver page.
+            new_sitekey = get_sitekey()
+            if not new_sitekey == sitekey:
+                print(get_time(), '- Sitekey changed:', new_sitekey)
+                sitekey = new_sitekey
+            for i in range(0, request_amount):
+                t = threading.Thread(target=get_token_from_2captcha, args=(sitekey,))
+                t.daemon = True
+                t.start()
+                time.sleep(0.1)
+            print(get_time(), '-', 'Requested', str(request_amount), 'captchas.')
+            time.sleep(sleep_time)
+
+
+    else:
+        print('Using Normal Mode.')
+        while True:
+            x = int(input('How many captchas?: '))
+
+            for i in range(0, int(x)):
+                t = threading.Thread(target=get_token_from_2captcha, args=(sitekey,))
+                t.daemon = True
+                t.start()
+                time.sleep(0.1)
+            print('Requested ' + str(x) + ' captcha(s).')
+            while not active_threads == 0:
+                print('-------------------------')
+                print('Active Threads          -', active_threads)
+                print('Captchas Sent to ANBAIO -', captchas_sent)
+                time.sleep(5)
+
+            print('-------------------------')
+            print('Active Threads          -', active_threads)
+            print('Captchas Sent to ANBAIO -', captchas_sent)
 
 
 def check_updates():
@@ -319,12 +351,39 @@ def send_captcha(captcha_response):
         if resp.status_code is 200:
             active_threads -= 1
             captchas_sent += 1
+            print(get_time(), '- Captcha sent to AIO Bot.')
             return
     except:
         print('Unable to send captcha, server may be down.')
         active_threads -= 1
         return None
 
+
+def get_integer(text):
+    while True:
+        try:
+            response = int(input(text))
+            break
+        except:
+            print('Invalid input, should be a number.')
+            continue
+    return response
+
+
+def get_float(text):
+    while True:
+        try:
+            response = float(input(text))
+            break
+        except:
+            print('Invalid input, should be a number.')
+            continue
+    return response
+
+
+def get_time():
+    ctime = str(datetime.datetime.fromtimestamp(time.time()))
+    return (ctime[11: (len(ctime) - 3)])
 
 if __name__ == "__main__":
     main()

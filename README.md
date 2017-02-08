@@ -1,4 +1,4 @@
-Latest Version: 1.2.0
+Latest Version: 1.3.0
 
 # ANBAIO2captcha
 
@@ -20,6 +20,10 @@ http://streamable.com/h20nf
 3. Open cmd as Administrator.
 4. Change directory to ANBAIO2captcha folder. Example: 'cd C:\Users\Hunter\Desktop\ANBAIO2captcha'
 5. 'python ANBAIO2captcha.py'
+
+# Modes
+1. Normal - Normal mode will requesting X amount of captchas as soon as you tell it to, and then will stop.
+2. Never Ending - Never ending mode will requesting X amount of captchas every Y minutes until stopped by the user.
 
 DM me on twitter @hunter_bdm with any questions.
 
