@@ -88,7 +88,7 @@ def main():
     # Get 2captcha APIKEY
     try:
         apikey_file = open('apikey.txt')
-        apikey = apikey_file.read()
+        apikey = apikey_file.read().replace('\n', '').strip()
         apikey_file.close()
     except:
         print('Unable to read apikey.txt')
