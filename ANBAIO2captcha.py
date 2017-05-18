@@ -51,7 +51,7 @@ solver_urls = [
     'http://anb.ruvilla.com:54785/RuVillaCaptcha.html',
     'http://anb.bdgastore.com:54785/bdgastoreCaptcha.html',  # Unconfirmed
     'http://anb.yeezysupply.com:54785/YeezySupplyCaptcha.html',  # Unconfirmed
-    'http://anb.palaceskateboards.com:54785/PalaceSBCaptcha.html',  # Unconfirmed
+    'http://anb.palacesb.com:54785/PalaceSBCaptcha.html',
     'http://anb.consortium.co.uk:54785/ConsortiumCaptcha.html'
 ]
 
@@ -61,7 +61,7 @@ post_urls = [
     'http://anb.ruvilla.com:54785/resruvilla',
     'http://anb.bdgastore.com:54785/resbodega',  # Unconfirmed
     'http://anb.yeezysupply.com:54785/resyeezysupply',  # Unconfirmed
-    'http://anb.palaceskateboards.com:54785/respalacesb',  # Unconfirmed
+    'http://anb.palacesb.com:54785/respalacesb',
     'http://anb.consortium.co.uk:54785/resConsortium'
 ]
 
