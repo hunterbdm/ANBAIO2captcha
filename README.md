@@ -1,4 +1,4 @@
-Latest Version: 1.3.0
+Latest Version: 1.3.1
 
 # ANBAIO2captcha
 

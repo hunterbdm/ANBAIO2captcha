@@ -6,7 +6,7 @@ import random
 import datetime
 from bs4 import BeautifulSoup as bs
 
-current_version = '1.3.0'
+current_version = '1.3.1'
 
 proxies = []
 apikey = None
