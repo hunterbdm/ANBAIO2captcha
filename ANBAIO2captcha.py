@@ -6,7 +6,7 @@ import random
 import datetime
 from bs4 import BeautifulSoup as bs
 
-current_version = '1.3.1'
+current_version = '1.3.2'
 
 proxies = []
 apikey = None
@@ -32,7 +32,8 @@ site_names = [
     'Bodega',
     'YeezySupply',
     'PalaceSB',
-    'Consortium'
+    'Consortium',
+    'DMS'
 ]
 
 site_urls = [
@@ -52,7 +53,8 @@ solver_urls = [
     'http://anb.bdgastore.com:54785/bdgastoreCaptcha.html',  # Unconfirmed
     'http://anb.yeezysupply.com:54785/YeezySupplyCaptcha.html',  # Unconfirmed
     'http://anb.palacesb.com:54785/PalaceSBCaptcha.html',
-    'http://anb.consortium.co.uk:54785/ConsortiumCaptcha.html'
+    'http://anb.consortium.co.uk:54785/ConsortiumCaptcha.html',
+    'http://anb.doverstreetmarket.com:54785/DSMCaptcha.html'
 ]
 
 post_urls = [
@@ -62,7 +64,8 @@ post_urls = [
     'http://anb.bdgastore.com:54785/resbodega',  # Unconfirmed
     'http://anb.yeezysupply.com:54785/resyeezysupply',  # Unconfirmed
     'http://anb.palacesb.com:54785/respalacesb',
-    'http://anb.consortium.co.uk:54785/resConsortium'
+    'http://anb.consortium.co.uk:54785/resConsortium',
+    'http://anb.doverstreetmarket.com:54785/resDSM'
 ]
 
 
